@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html><head>
+
+<link rel="stylesheet" href="assets/styles.css">
+<script src="assets/audiosynth.js"></script>
+<script src="assets/audiosynth.view.js"></script>
+<script src="assets/lodash.min.js"></script>
+</head>
+
+<body>
+<div class="keyboard-options">
+Sound
+<select id="sound">
+    <option value="0">Keyboard</option>
+	<option value="1" selected="">Synth</option>
+	<option value="2">Organ</option>
+    <option value="3">Acoustic Guitar</option>
+    <option value="4">EDM, bro!</option>
+</select>
+<div id="keyboard" class="keyboard-holder" style="width: 840px;"><div class="white key" id="KEY_C,-1" style="width: 40px; height: 200px; left: 0px;"><div class="label"><b>Q</b><br><br>C<span name="OCTAVE_LABEL" value="-1">3</span></div></div><div class="black key" id="KEY_C#,-1" style="width: 30px; height: 120px; left: 25px;"><div class="label"><b>2</b><br><br>C<span name="OCTAVE_LABEL" value="-1">3</span>#</div></div><div class="white key" id="KEY_D,-1" style="width: 40px; height: 200px; left: 40px;"><div class="label"><b>W</b><br><br>D<span name="OCTAVE_LABEL" value="-1">3</span></div></div><div class="black key" id="KEY_D#,-1" style="width: 30px; height: 120px; left: 65px;"><div class="label"><b>3</b><br><br>D<span name="OCTAVE_LABEL" value="-1">3</span>#</div></div><div class="white key" id="KEY_E,-1" style="width: 40px; height: 200px; left: 80px;"><div class="label"><b>E</b><br><br>E<span name="OCTAVE_LABEL" value="-1">3</span></div></div><div class="white key" id="KEY_F,-1" style="width: 40px; height: 200px; left: 120px;"><div class="label"><b>R</b><br><br>F<span name="OCTAVE_LABEL" value="-1">3</span></div></div><div class="black key" id="KEY_F#,-1" style="width: 30px; height: 120px; left: 145px;"><div class="label"><b>5</b><br><br>F<span name="OCTAVE_LABEL" value="-1">3</span>#</div></div><div class="white key" id="KEY_G,-1" style="width: 40px; height: 200px; left: 160px;"><div class="label"><b>T</b><br><br>G<span name="OCTAVE_LABEL" value="-1">3</span></div></div><div class="black key" id="KEY_G#,-1" style="width: 30px; height: 120px; left: 185px;"><div class="label"><b>6</b><br><br>G<span name="OCTAVE_LABEL" value="-1">3</span>#</div></div><div class="white key" id="KEY_A,-1" style="width: 40px; height: 200px; left: 200px;"><div class="label"><b>Y</b><br><br>A<span name="OCTAVE_LABEL" value="-1">3</span></div></div><div class="black key" id="KEY_A#,-1" style="width: 30px; height: 120px; left: 225px;"><div class="label"><b>7</b><br><br>A<span name="OCTAVE_LABEL" value="-1">3</span>#</div></div><div class="white key" id="KEY_B,-1" style="width: 40px; height: 200px; left: 240px;"><div class="label"><b>U</b><br><br>B<span name="OCTAVE_LABEL" value="-1">3</span></div></div><div class="white key" id="KEY_C,0" style="width: 40px; height: 200px; left: 280px;"><div class="label"><b>I</b><br><br>C<span name="OCTAVE_LABEL" value="0">4</span></div></div><div class="black key" id="KEY_C#,0" style="width: 30px; height: 120px; left: 305px;"><div class="label"><b>9</b><br><br>C<span name="OCTAVE_LABEL" value="0">4</span>#</div></div><div class="white key" id="KEY_D,0" style="width: 40px; height: 200px; left: 320px;"><div class="label"><b>O</b><br><br>D<span name="OCTAVE_LABEL" value="0">4</span></div></div><div class="black key" id="KEY_D#,0" style="width: 30px; height: 120px; left: 345px;"><div class="label"><b>0</b><br><br>D<span name="OCTAVE_LABEL" value="0">4</span>#</div></div><div class="white key" id="KEY_E,0" style="width: 40px; height: 200px; left: 360px;"><div class="label"><b>P</b><br><br>E<span name="OCTAVE_LABEL" value="0">4</span></div></div><div class="white key" id="KEY_F,0" style="width: 40px; height: 200px; left: 400px;"><div class="label"><b>[</b><br><br>F<span name="OCTAVE_LABEL" value="0">4</span></div></div><div class="black key" id="KEY_F#,0" style="width: 30px; height: 120px; left: 425px;"><div class="label"><b>=</b><br><br>F<span name="OCTAVE_LABEL" value="0">4</span>#</div></div><div class="white key" id="KEY_G,0" style="width: 40px; height: 200px; left: 440px;"><div class="label"><b>]</b><br><br>G<span name="OCTAVE_LABEL" value="0">4</span></div></div><div class="black key" id="KEY_G#,0" style="width: 30px; height: 120px; left: 465px;"><div class="label"><b>A</b><br><br>G<span name="OCTAVE_LABEL" value="0">4</span>#</div></div><div class="white key" id="KEY_A,0" style="width: 40px; height: 200px; left: 480px;"><div class="label"><b>Z</b><br><br>A<span name="OCTAVE_LABEL" value="0">4</span></div></div><div class="black key" id="KEY_A#,0" style="width: 30px; height: 120px; left: 505px; background-color: rgb(255, 0, 0); margin-top: 5px; box-shadow: none;"><div class="label"><b>S</b><br><br>A<span name="OCTAVE_LABEL" value="0">4</span>#</div></div><div class="white key" id="KEY_B,0" style="width: 40px; height: 200px; left: 520px;"><div class="label"><b>X</b><br><br>B<span name="OCTAVE_LABEL" value="0">4</span></div></div><div class="white key" id="KEY_C,1" style="width: 40px; height: 200px; left: 560px;"><div class="label"><b>C</b><br><br>C<span name="OCTAVE_LABEL" value="1">5</span></div></div><div class="black key" id="KEY_C#,1" style="width: 30px; height: 120px; left: 585px;"><div class="label"><b>F</b><br><br>C<span name="OCTAVE_LABEL" value="1">5</span>#</div></div><div class="white key" id="KEY_D,1" style="width: 40px; height: 200px; left: 600px;"><div class="label"><b>V</b><br><br>D<span name="OCTAVE_LABEL" value="1">5</span></div></div><div class="black key" id="KEY_D#,1" style="width: 30px; height: 120px; left: 625px;"><div class="label"><b>G</b><br><br>D<span name="OCTAVE_LABEL" value="1">5</span>#</div></div><div class="white key" id="KEY_E,1" style="width: 40px; height: 200px; left: 640px;"><div class="label"><b>B</b><br><br>E<span name="OCTAVE_LABEL" value="1">5</span></div></div><div class="white key" id="KEY_F,1" style="width: 40px; height: 200px; left: 680px;"><div class="label"><b>N</b><br><br>F<span name="OCTAVE_LABEL" value="1">5</span></div></div><div class="black key" id="KEY_F#,1" style="width: 30px; height: 120px; left: 705px;"><div class="label"><b>J</b><br><br>F<span name="OCTAVE_LABEL" value="1">5</span>#</div></div><div class="white key" id="KEY_G,1" style="width: 40px; height: 200px; left: 720px;"><div class="label"><b>M</b><br><br>G<span name="OCTAVE_LABEL" value="1">5</span></div></div><div class="black key" id="KEY_G#,1" style="width: 30px; height: 120px; left: 745px;"><div class="label"><b>K</b><br><br>G<span name="OCTAVE_LABEL" value="1">5</span>#</div></div><div class="white key" id="KEY_A,1" style="width: 40px; height: 200px; left: 760px;"><div class="label"><b>,</b><br><br>A<span name="OCTAVE_LABEL" value="1">5</span></div></div><div class="black key" id="KEY_A#,1" style="width: 30px; height: 120px; left: 785px;"><div class="label"><b>L</b><br><br>A<span name="OCTAVE_LABEL" value="1">5</span>#</div></div><div class="white key" id="KEY_B,1" style="width: 40px; height: 200px; left: 800px;"><div class="label"><b>.</b><br><br>B<span name="OCTAVE_LABEL" value="1">5</span></div></div></div>
+    <div class="keyboard-options">
+        Range [C<span id="OCTAVE_LOWER">3</span>-B<span id="OCTAVE_UPPER">5</span>]
+        <input type="button" id="-_OCTAVE" value="-">
+        <input type="button" id="+_OCTAVE" value="+"><br>
+        <i>(Use left/right arrows to adjust with keyboard)</i>
+    </div>
+<div class="sequence-options">
+    <div class="col-3">
+        <h3>Note length quantities</h3>
+        <div class="block">
+            <label for="beat_1">0.25 beats:</label><input class="input-length" id="beat_1" type="range" step="1" min="0" max="100" value="20" data-length="0.25">
+        </div>
+        <div class="block">
+            <label for="beat_2">0.5 beats:</label><input class="input-length" id="beat_2" type="range" step="1" min="0" max="100" value="30" data-length="0.5">
+        </div>
+        <div class="block">
+            <label for="beat_3">0.75 beats:</label><input class="input-length" id="beat_3" type="range" step="1" min="0" max="100" value="30" data-length="0.75">
+        </div>
+        <div class="block">
+            <label for="beat_4">1 beats:</label><input class="input-length" id="beat_4" type="range" step="1" min="0" max="100" value="40" data-length="1">
+        </div>
+        <div class="block">
+            <label for="beat_5">1.5 beats:</label><input class="input-length" id="beat_5" type="range" step="1" min="0" max="100" value="40" data-length="1.5">
+        </div>
+        <div class="block">
+            <label for="beat_6">2 beats:</label><input class="input-length" id="beat_6" type="range" step="1" min="0" max="100" value="10" data-length="2.0">
+        </div>
+    </div>
+    <div class="col-3">
+        <h3>Scale distribution</h3>
+        <div class="block">
+            <input type="text" value="C" id="note_1" class="input-note"><input id="note_quantity_1" class="input-note-quantity" type="range" step="1" min="0" max="100" value="16">
+        </div>
+        <div class="block">
+            <input type="text" value="D" id="note_2" class="input-note"><input id="note_quantity_2" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
+        </div>
+        <div class="block">
+            <input type="text" value="E" id="note_3" class="input-note"><input id="note_quantity_3" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
+        </div>
+        <div class="block">
+            <input type="text" value="F" id="note_4" class="input-note"><input id="note_quantity_4" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
+        </div>
+        <div class="block">
+            <input type="text" value="G" id="note_5" class="input-note"><input id="note_quantity_5" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
+        </div>
+        <div class="block">
+            <input type="text" value="A" id="note_6" class="input-note"><input id="note_quantity_6" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
+        </div>
+        <div class="block">
+            <input type="text" value="B" id="note_7" class="input-note"><input id="note_quantity_7" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
+        </div>
+    </div>
+    <div class="col-3">
+    <h3>Generation</h3>
+        <div class="block">
+            <label for="sequence_length">Length:</label><input id="sequence_length" type="number" step="1" min="4" max="11" value="7">
+            <label for="voices">Voices:</label><input id="voices" type="number" step="1" min="1" max="4" value="1">
+            <label for="octaves">Octaves:</label><input id="octaves" type="number" step="1" min="1" max="3" value="1">
+        </div>
+    <h3>Playback</h3>
+        <div class="block">
+            <label for="input_bpm">BPM:</label><input id="input_bpm" type="number" step="5" min="10" max="300" value="120">
+            <label for="repeat">Repeat sequence:</label><input id="repeat" type="number" step="1" min="1" max="64" value="4">
+        </div>
+        <div class="block">
+            <label for="unquantize">Unquantize:</label>
+            <input class="unquantize" id="unquantize" type="range" step="500" min="0" max="20000" value="500">
+        </div>
+        <div class="block">
+            <button id="generate_sequence">Generate</button>
+            <button id="play_sequence">Play</button>
+            <button id="stop_sequence">Stop</button>
+        </div>
+    </div>
+</div>
+<div style="clear: both;">
+    <h3>Current Sequence</h3>
+    <textarea id="sequence_editor" cols="100" rows="4"></textarea>
+<div>
+    <h3>History</h3>
+    <div id="sequence_list" class="sequence-list">
+    </div>
+</div>
+</div>
+
+<!--
+<div id="canvas-holder" style="width:40%">
+    <canvas id="chart-area" />
+</div>
+
+<script>
+    var randomScalingFactor = function() {
+        return Math.round(Math.random() * 100);
+    };
+
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(201, 203, 207)'
+    };
+
+
+    var config = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                ],
+                backgroundColor: [
+                    window.chartColors.red,
+                    window.chartColors.orange,
+                    window.chartColors.yellow,
+                    window.chartColors.green,
+                    window.chartColors.blue,
+                ],
+                label: 'Dataset 1'
+            }],
+            labels: [
+                "Red",
+                "Orange",
+                "Yellow",
+                "Green",
+                "Blue"
+            ]
+        },
+        options: {
+            responsive: true
+        }
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById("chart-area").getContext("2d");
+        window.myPie = new Chart(ctx, config);
+    };
+</script> -->
+
+
+<script type="text/javascript">
+
+var a = new AudioSynthView();
+a.draw();
+
+var CURRENT_SEQUENCE = [];
+
+function getSettings(){
+    var note_lengths = [];
+    var note_distribution = [];
+
+    var inputs = document.getElementsByClassName('input-length');
+    var note_quantities = document.getElementsByClassName('input-note-quantity');
+    var notes = document.getElementsByClassName('input-note');
+
+    for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        note_lengths.push([input.getAttribute('data-length'), input.value])
+    }
+
+    for (var k = 0; k < notes.length; k++) {
+        note_distribution.push([notes[k].value, parseInt(note_quantities[k].value)]);
+    }
+
+    var settings = {
+        "unquantize": parseInt(document.getElementById('unquantize').value),
+        "repeat": parseInt(document.getElementById('repeat').value),
+        "sequence_length": parseInt(document.getElementById('sequence_length').value),
+        "voices": parseInt(document.getElementById('voices').value),
+        "octave_spread": parseInt(document.getElementById('octaves').value),
+        "bpm": document.getElementById('input_bpm').value,
+        "note_lengths": note_lengths,
+        "note_distribution": note_distribution,
+    }
+    return settings;
+}
+
+(function () {
+    var sequences = JSON.parse(localStorage.getItem('sequences'));
+    for (var i = 0; i < sequences.length; i++) {
+        addToHistory(JSON.stringify(sequences[i]));
+    }
+
+})();
+
+
+document.getElementById('sequence_editor').addEventListener('focusout', function(e){
+    setCurrentSequence(JSON.parse(this.value));
+}, false);
+
+
+
+
+var getNoteLengths = function(){
+    settings = getSettings();
+    return _.flatMap(settings.note_lengths, function(i){
+        return _.fill(Array(parseInt(i[1])), i[0])
+    });
+}
+
+var getNoteDistributions = function(){
+    settings = getSettings();
+    return _.flatMap(settings.note_distribution, function(i){
+        return _.fill(Array(parseInt(i[1])), i[0])
+    });
+}
+
+
+function generateSequence() {
+    var settings = getSettings();
+    var note_lengths = getNoteLengths();
+    var note_distribution = getNoteDistributions();
+    var final_sequence = [];
+
+    for (var i = 0; i < settings.sequence_length; i++) {
+        var chord = [];
+        var __note_distribution = note_distribution.slice();
+
+        for (var j = 0; j < settings.voices; j++) {
+            var random_note = _.sample(__note_distribution);
+            if (random_note == undefined) throw Error('Notes in scale must exceed voices.');
+
+            var octave;
+
+            switch(settings.octave_spread) {
+                case 1:
+                    octave = 0;
+                    break;
+                case 2:
+                    octave = _.random(0,1);
+                    break;
+
+                case 3:
+                    octave = _.random(-1,1);
+                    break;
+            }
+
+            chord.push(random_note + "," + octave);
+            __note_distribution = _.without(__note_distribution, random_note);
+        }
+        final_sequence.push([chord, _.sample(note_lengths)])
+    }
+
+    return final_sequence;
+}
+
+
+function updateStorage() {
+    var sequences = JSON.parse(localStorage.getItem('sequences'));
+    if (Array.isArray(sequences) == false) {
+        sequences = [];
+    }
+    sequences.push(CURRENT_SEQUENCE);
+    sequences = JSON.stringify(sequences);
+    localStorage.setItem('sequences', sequences);
+}
+
+function addToHistory(text) {
+    var sequence_list = document.getElementById('sequence_list');
+    var entry = document.createElement('div');
+    var slider = document.createElement('input');
+    slider.setAttribute('type', 'range');
+    slider.setAttribute('min', 0);
+    slider.setAttribute('step', 1);
+    slider.setAttribute('max', 9);
+    slider.setAttribute('value', 0);
+    entry.className = 'block sequence-entry';
+    entry.appendChild(document.createTextNode(text));
+    entry.appendChild(slider);
+    sequence_list.insertBefore(entry, sequence_list.childNodes[0]);
+}
+
+function setCurrentSequence(sequence_settings) {
+    CURRENT_SEQUENCE = sequence_settings;
+    var sequence_text = JSON.stringify(CURRENT_SEQUENCE);
+    var sequence_editor = document.getElementById('sequence_editor');
+    sequence_editor.innerText = sequence_text;
+}
+
+function add_sequence() {
+    sequence = [generateSequence(), getSettings()];
+    setCurrentSequence(sequence);
+    updateStorage();
+
+    addToHistory(JSON.stringify(sequence));
+    a.playSong(sequence);
+}
+
+
+document.getElementById('generate_sequence').addEventListener('click', function() {
+    add_sequence();
+});
+document.getElementById('stop_sequence').addEventListener('click', function() {
+    a.stopSong();
+});
+
+document.getElementById('play_sequence').addEventListener('click', function() {
+    a.playSong(CURRENT_SEQUENCE);
+});
+
+document.getElementById('unquantize').addEventListener('focusout', function() {
+    unquantize = parseInt(this.value);
+});
+
+var sequence_entries = document.getElementsByClassName('sequence-entry');
+for (var i = 0; i < sequence_entries.length; i++) {
+    sequence_entries[i].addEventListener('click', function() {
+        var sequence_settings = JSON.parse(this.innerText);
+        if (sequence_settings.length > 2) {
+            sequence_settings = [sequence_settings, getSettings()]
+        }
+        setCurrentSequence(sequence_settings);
+        a.playSong(sequence_settings)
+    });
+};
+
+
+</script>
+
+
+
+
+</body></html>
