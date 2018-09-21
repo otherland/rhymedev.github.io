@@ -203,7 +203,7 @@ function getSettings(){
 
 (function () {
     var sequences = JSON.parse(localStorage.getItem('sequences'));
-    if (! sequences.length) return;
+    if (! sequences) return;
     for (var i = 0; i < sequences.length; i++) {
         addToHistory(JSON.stringify(sequences[i]));
     }
