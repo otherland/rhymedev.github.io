@@ -79,14 +79,14 @@ Sound
         </div>
     <h3>Playback</h3>
         <div class="block">
-            <label for="input_bpm">BPM:</label><input id="input_bpm" type="number" step="5" min="10" max="300" value="120">
+            <label for="bpm">BPM:</label><input id="bpm" type="number" step="5" min="10" max="300" value="120">
             <label for="repeat">Repeat sequence:</label><input id="repeat" type="number" step="1" min="1" max="64" value="4">
         </div>
         <div class="block">
             <label for="unquantize">Unquantize:</label>
             <input class="unquantize" id="unquantize" type="range" step="500" min="0" max="20000" value="500">
         </div>
-        <div class="block">
+        <div class="block playback_controls">
             <button id="generate_sequence">Generate</button>
             <button id="play_sequence">Play</button>
             <button id="stop_sequence">Stop</button>
@@ -171,6 +171,28 @@ a.draw();
 
 var CURRENT_SEQUENCE = [];
 
+function loadSettings(settings) {
+    document.getElementById('unquantize').value = settings.unquantize;
+    document.getElementById('repeat').value = settings.repeat;
+    document.getElementById('sequence_length').value = settings.sequence_length;
+    document.getElementById('voices').value = settings.voices;
+    document.getElementById('octaves').value =  settings.octaves;
+    document.getElementById('bpm').value =  settings.bpm;
+
+    var inputs = document.getElementsByClassName('input-length');
+    var notes = document.getElementsByClassName('input-note');
+    var note_quantities = document.getElementsByClassName('input-note-quantity');
+
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = settings.note_lengths[i][1];
+    }
+
+    for (var i = 0; i < notes.length; i++) {
+        notes[i].value = settings.note_distribution[i][0];
+        note_quantities[i].value = settings.note_distribution[i][1];
+    }
+}
+
 function getSettings(){
     var note_lengths = [];
     var note_distribution = [];
@@ -193,8 +215,8 @@ function getSettings(){
         "repeat": parseInt(document.getElementById('repeat').value),
         "sequence_length": parseInt(document.getElementById('sequence_length').value),
         "voices": parseInt(document.getElementById('voices').value),
-        "octave_spread": parseInt(document.getElementById('octaves').value),
-        "bpm": document.getElementById('input_bpm').value,
+        "octaves": parseInt(document.getElementById('octaves').value),
+        "bpm": document.getElementById('bpm').value,
         "note_lengths": note_lengths,
         "note_distribution": note_distribution,
     }
@@ -207,7 +229,13 @@ function getSettings(){
     for (var i = 0; i < sequences.length; i++) {
         addToHistory(JSON.stringify(sequences[i]));
     }
+    CURRENT_SEQUENCE = sequences[0];
+})();
 
+(function () {
+    var settings = JSON.parse(localStorage.getItem('melody_settings'));
+    if (! settings) return;
+    loadSettings(settings);
 })();
 
 
@@ -235,6 +263,7 @@ var getNoteDistributions = function(){
 
 function generateSequence() {
     var settings = getSettings();
+
     var note_lengths = getNoteLengths();
     var note_distribution = getNoteDistributions();
     var final_sequence = [];
@@ -249,7 +278,7 @@ function generateSequence() {
 
             var octave;
 
-            switch(settings.octave_spread) {
+            switch(settings.octaves) {
                 case 1:
                     octave = 0;
                     break;
@@ -273,13 +302,22 @@ function generateSequence() {
 
 
 function updateStorage() {
+    // get storage data
     var sequences = JSON.parse(localStorage.getItem('sequences'));
+
     if (Array.isArray(sequences) == false) {
         sequences = [];
     }
+    // add current data
     sequences.push(CURRENT_SEQUENCE);
+    var settings = getSettings();
+
     sequences = JSON.stringify(sequences);
+    settings = JSON.stringify(settings);
+
+    // store data
     localStorage.setItem('sequences', sequences);
+    localStorage.setItem('melody_settings', settings);
 }
 
 function addToHistory(text) {
@@ -322,6 +360,7 @@ document.getElementById('stop_sequence').addEventListener('click', function() {
 });
 
 document.getElementById('play_sequence').addEventListener('click', function() {
+    console.log(CURRENT_SEQUENCE)
     a.playSong(CURRENT_SEQUENCE);
 });
 

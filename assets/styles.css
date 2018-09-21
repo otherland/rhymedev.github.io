@@ -78,3 +78,8 @@
     float: left;
     width: 33.333%;
 }
+
+.playback_controls button {
+    font-size: 20px;
+    margin-right: 5px;
+}
