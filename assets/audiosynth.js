@@ -243,7 +243,7 @@ Synth.loadSoundProfile({
 	name: 'synth',
 	attack: function() { return 0.002; },
 	dampen: function(sampleRate, frequency, volume) {
-		var val = Math.pow(0.2*Math.log((frequency*volume)/sampleRate),2);
+		var val = Math.pow(0.3*Math.log((frequency*volume)/sampleRate),2);
 		return val;
 	},
 	wave: function(i, sampleRate, frequency, volume) {

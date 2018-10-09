@@ -1,6 +1,8 @@
 
     body { font-family: Helvetica; color: rgb(32,32,32); padding: 10px;
-        background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAM0lEQVQIW2P8DwQMMPDwIAODvD2YxwiXQBJESKAJQiQeHPgP0w43EsUoZFGgCQg70BwAANTgIZHym5jNAAAAAElFTkSuQmCC') repeat;
+        background-color: #3d2e7f;
+        background-image: url(star-bg.svg);
+        color: white;
          }
 
     b { font-weight: bold; }
@@ -66,7 +68,6 @@
 .sequence-entry {
     margin: 1em;
     border: 1px solid whitesmoke;
-    background-color: white;
     padding: 0.5em;
     width: 60%;
 }
@@ -82,4 +83,7 @@
 .playback_controls button {
     font-size: 20px;
     margin-right: 5px;
+}
+.scale-select {
+    font-size: 20px;
 }

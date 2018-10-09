@@ -26,7 +26,13 @@ Sound
     </div>
 <div class="sequence-options">
     <div class="col-3">
-        <h3>Note length quantities</h3>
+        <h3>Rhythm tap</h3>
+        <div class="block">
+            <button id="rhythm_start">START</button>
+            <button id="rhythm_stop">STOP</button>
+            <button id="rhythm_clear">CLEAR</button>
+        </div>
+        <h3>Note length distribution</h3>
         <div class="block">
             <label for="beat_1">0.25 beats:</label><input class="input-length" id="beat_1" type="range" step="1" min="0" max="100" value="20" data-length="0.25">
         </div>
@@ -47,26 +53,64 @@ Sound
         </div>
     </div>
     <div class="col-3">
+        <h3>Choose scale</h3>
+        <div class="block">
+            <h4>Major</h4>
+                <button class="scale-select" data-notes="A, B, C#, D, E, F#, G#">A</button>
+                <button class="scale-select" data-notes="A#, C, D, D#, F, G, A">A#</button>
+                <button class="scale-select" data-notes="B, C#, D#, E, F#, G#, A#">B</button>
+                <button class="scale-select" data-notes="C, D, E, F, G, A, B">C</button>
+                <button class="scale-select" data-notes="C#, D#, F, F#, G#, A#, C">C#</button>
+                <button class="scale-select" data-notes="D, E, F#, G, A, B, C#">D</button>
+                <button class="scale-select" data-notes="D#, E, F#, G#, A, B, C#">D#</button>
+                <button class="scale-select" data-notes="D#, F, G, G#, A#, C, D">E</button>
+                <button class="scale-select" data-notes="F, G, A, A#, C, D, E">F</button>
+                <button class="scale-select" data-notes="F#, G#, A#, B, C#, D#, F">F#</button>
+                <button class="scale-select" data-notes="G, A, B, C, D, E, F#">G</button>
+                <button class="scale-select" data-notes="G#, A#, C, C#, D#, F, G">G#</button>
+            </div>
+             <div class="block">
+                <h4>Minor</h4>
+                <button class="scale-select" data-notes="A, B, C, D, E, F, G">A</button>
+                <button class="scale-select" data-notes="A#, C, C#, D#, F, F#, G#">A#</button>
+                <button class="scale-select" data-notes="B, C#, D, E, F#, G, A">B</button>
+                <button class="scale-select" data-notes="C, D, D#, F, G, G#, A#">C</button>
+                <button class="scale-select" data-notes="C#, D#, E, F#, G#, A, B">C#</button>
+                <button class="scale-select" data-notes="D, E, F, G, A, A#, C">D</button>
+                <button class="scale-select" data-notes="D#, F, F#, G#, A#, B, C#">D#</button>
+                <button class="scale-select" data-notes="E, F#, G, A, B, C, D">E</button>
+                <button class="scale-select" data-notes="F, G, G#, A#, C, C#, D#">F</button>
+                <button class="scale-select" data-notes="F#, G#, A#, B, C#, D#, E">F#</button>
+                <button class="scale-select" data-notes="G, A, A#, C, D, D#, F">G</button>
+                <button class="scale-select" data-notes="G#, A#, B, C#, D#, E, F#">G#</button>
+            </div>
         <h3>Scale distribution</h3>
         <div class="block">
+            <label for="note_1">1</label>
             <input type="text" value="C" id="note_1" class="input-note"><input id="note_quantity_1" class="input-note-quantity" type="range" step="1" min="0" max="100" value="16">
         </div>
         <div class="block">
+            <label for="note_2">2</label>
             <input type="text" value="D" id="note_2" class="input-note"><input id="note_quantity_2" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
         </div>
         <div class="block">
+            <label for="note_3">3</label>
             <input type="text" value="E" id="note_3" class="input-note"><input id="note_quantity_3" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
         </div>
         <div class="block">
+            <label for="note_4">4</label>
             <input type="text" value="F" id="note_4" class="input-note"><input id="note_quantity_4" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
         </div>
         <div class="block">
+            <label for="note_5">5</label>
             <input type="text" value="G" id="note_5" class="input-note"><input id="note_quantity_5" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
         </div>
         <div class="block">
+            <label for="note_6">6</label>
             <input type="text" value="A" id="note_6" class="input-note"><input id="note_quantity_6" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
         </div>
         <div class="block">
+            <label for="note_7">7</label>
             <input type="text" value="B" id="note_7" class="input-note"><input id="note_quantity_7" class="input-note-quantity" type="range" step="1" min="0" max="100" value="14">
         </div>
     </div>
@@ -96,6 +140,7 @@ Sound
 <div style="clear: both;">
     <h3>Current Sequence</h3>
     <textarea id="sequence_editor" cols="100" rows="4"></textarea>
+    <input type="checkbox" class="checkbox-lg" id="sequence_fitness">
 <div>
     <h3>History</h3>
     <div id="sequence_list" class="sequence-list">
@@ -263,12 +308,14 @@ var getNoteDistributions = function(){
 
 function generateSequence() {
     var settings = getSettings();
+    var bpm = settings.bpm;
+    var unquantize = settings.unquantize;
 
     var note_lengths = getNoteLengths();
     var note_distribution = getNoteDistributions();
     var final_sequence = [];
 
-    for (var i = 0; i < settings.sequence_length; i++) {
+    for (var sequence_step = 0; sequence_step < settings.sequence_length; sequence_step++) {
         var chord = [];
         var __note_distribution = note_distribution.slice();
 
@@ -294,7 +341,16 @@ function generateSequence() {
             chord.push(random_note + "," + octave);
             __note_distribution = _.without(__note_distribution, random_note);
         }
-        final_sequence.push([chord, _.sample(note_lengths)])
+        var noteLen = 0;
+        if (BEAT_PATTERN.length) {
+            noteLen = BEAT_PATTERN[sequence_step]
+        } else {
+            var random_unquantize = Math.random() * (unquantize * 2) - unquantize;
+            var random_factor = ((60000 + random_unquantize) / bpm);
+            noteLen =  random_factor * _.sample(note_lengths);
+        }
+
+        final_sequence.push([chord, noteLen])
     }
 
     return final_sequence;
@@ -321,17 +377,9 @@ function updateStorage() {
 }
 
 function addToHistory(text) {
-    var sequence_list = document.getElementById('sequence_list');
     var entry = document.createElement('div');
-    var slider = document.createElement('input');
-    slider.setAttribute('type', 'range');
-    slider.setAttribute('min', 0);
-    slider.setAttribute('step', 1);
-    slider.setAttribute('max', 9);
-    slider.setAttribute('value', 0);
     entry.className = 'block sequence-entry';
     entry.appendChild(document.createTextNode(text));
-    entry.appendChild(slider);
     sequence_list.insertBefore(entry, sequence_list.childNodes[0]);
 }
 
@@ -340,6 +388,7 @@ function setCurrentSequence(sequence_settings) {
     var sequence_text = JSON.stringify(CURRENT_SEQUENCE);
     var sequence_editor = document.getElementById('sequence_editor');
     sequence_editor.innerText = sequence_text;
+    // set sequence_fitness
 }
 
 function add_sequence() {
@@ -360,7 +409,6 @@ document.getElementById('stop_sequence').addEventListener('click', function() {
 });
 
 document.getElementById('play_sequence').addEventListener('click', function() {
-    console.log(CURRENT_SEQUENCE)
     a.playSong(CURRENT_SEQUENCE);
 });
 
@@ -379,7 +427,50 @@ for (var i = 0; i < sequence_entries.length; i++) {
         a.playSong(sequence_settings)
     });
 };
+(function() {
+    var scale_selects = document.getElementsByClassName('scale-select');
+    var input_notes = document.getElementsByClassName('input-note');
+    for (var i = 0; i < scale_selects.length; i++) {
+        scale_selects[i].addEventListener('click', function() {
+            if (this.dataset.notes) {
+                var notes = this.dataset.notes.split(',');
+                for (var i = 0; i < input_notes.length; i++) {
+                    input_notes[i].value = notes[i].trim();
+                }
+            }
+        });
+    };
+})()
 
+var RHYTHM_START = 0;
+var temp_beats = [];
+var BEAT_PATTERN = []
+document.getElementById('rhythm_start').addEventListener('click', function() {
+    var now = Date.now();
+    // if 10 seconds have elapsed
+    if (now - RHYTHM_START > 10000) {
+        RHYTHM_START = now;
+        temp_beats = [];
+    }
+    else {
+        temp_beats.push(now - RHYTHM_START);
+        RHYTHM_START = now;
+    }
+    a.playNote('G', 5)
+})
+document.getElementById('rhythm_stop').addEventListener('click', function() {
+    temp_beats.push(Date.now() - RHYTHM_START);
+    BEAT_PATTERN = temp_beats;
+    document.getElementById('sequence_length').value = BEAT_PATTERN.length;
+    console.log(BEAT_PATTERN)
+    a.playNote('F', 5)
+})
+document.getElementById('rhythm_clear').addEventListener('click', function() {
+    BEAT_PATTERN = [];
+})
+
+document.getElementById('sequence_fitness').addEventListener('change', function() {
+})
 
 </script>
 

@@ -237,7 +237,6 @@ function AudioSynthView() {
 
 	// Creates our audio player
 	var fnPlayNote = function(note, octave) {
-
 		src = __audioSynth.generate(selectSound.value, note, octave, 2);
 		container = new Audio(src);
 		container.addEventListener('ended', function() { container = null; });
@@ -315,21 +314,18 @@ function AudioSynthView() {
 		// stop any songs first
 		fnStopSong();
 
-		//unpack sequence_settings
+		// unpack sequence_settings
 		var arr = sequence_settings[0];
-		var bpm = sequence_settings[1].bpm;
 		var repeat = sequence_settings[1].repeat;
-		var unquantize = sequence_settings[1].unquantize;
 
 		var arr_repeated = arr;
 		for (var i = 1; i < repeat; i++) {
 		    arr_repeated = arr_repeated.concat(arr);
 		}
 
-		(__fnPlaySong = function(arr, bpm, unquantize) {
+		(__fnPlaySong = function(arr) {
 			if(arr.length>0) {
-				var random_unquantize = Math.random() * (unquantize * 2) - unquantize;
-				var noteLen = ((60000 + random_unquantize) / bpm) * (parseFloat(arr[0][1]));
+				var noteLen =  parseFloat(arr[0][1]);
 				if(!(arr[0][0] instanceof Array)) {
 					arr[0][0] = [arr[0][0]];
 				}
@@ -346,11 +342,11 @@ function AudioSynthView() {
 						while(i--) {
 							fnRemoveKeyBinding({keyCode:val[i]});
 						}
-						__fnPlaySong(array, bpm, unquantize);
+						__fnPlaySong(array);
 					} }(arr, keys),
 				noteLen));
 			}
-		})(arr_repeated, bpm, unquantize);
+		})(arr_repeated);
 	};
 
 	var fnStopSong = function() {
@@ -382,6 +378,9 @@ function AudioSynthView() {
 		value: fnPlayKeyboard
 	});
 
+	Object.defineProperty(this, 'playNote', {
+		value: fnPlayNote
+	});
 
 	Object.defineProperty(this, 'removeKeyBinding', {
 		value: fnRemoveKeyBinding
