@@ -12,7 +12,7 @@ Released under the MIT license: http://jsbin.mit-license.org
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width-device-width, initial-scale-1">
-	 <script src="react.js"></script>
+	<script src="react.js"></script>
   <script src="react-dom.js"></script>
   <script src="babel-browser.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
@@ -28,6 +28,9 @@ Released under the MIT license: http://jsbin.mit-license.org
     }
     .column.lines {
       width: 10%;
+    }
+    .lineRow {
+      margin-bottom: 2px;
     }
     input {
       font-size: 20px;
@@ -66,30 +69,40 @@ function lineShuffle(lines){
             super();
 
             this.state = {
-            'ml': [], 
-            'rel_rhy': [], 
-            'rel_nry': [], 
-            'rel_jjb': [], 
-            'rel_jja': [], 
-            'lc': [], 
-            'rel_trg': [], 
-            'rel_cns': [], 
-            'rel_ant': [], 
-            'rel_spc': [], 
-            'lines': [], 
+            'ml': [],
+            'rel_rhy': [],
+            'rel_nry': [],
+            'rel_jjb': [],
+            'rel_jja': [],
+            'lc': [],
+            'rel_trg': [],
+            'rel_cns': [],
+            'rel_ant': [],
+            'rel_spc': [],
+            'lines': [],
+            'savedLines': [],
             'query': ''
             };
         }
 
         componentDidMount () {
-           
+
         }
 
-handleInputChange = () => {
-    this.setState({
-      query: this.search.value
-    })
-  }
+    addLine = (line) => {
+      console.log(line)
+      this.setState(prevState => ({
+          savedLines: [
+              ...prevState.savedLines,
+              line
+          ]
+      }))
+    }
+    handleInputChange = () => {
+        this.setState({
+          query: this.search.value
+        })
+      }
     _handleRandom = () => {
       let arr = this.state.lines;
       shuffleArray(arr);
@@ -98,18 +111,18 @@ handleInputChange = () => {
     _handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       const params = [
-      'ml', 
-      'rel_rhy', 
-      'rel_nry', 
-      'rel_jjb', 
-      'rel_jja', 
-      'lc', 
-      'rel_trg', 
-      'rel_cns', 
+      'ml',
+      'rel_rhy',
+      'rel_nry',
+      'rel_jjb',
+      'rel_jja',
+      'lc',
+      'rel_trg',
+      'rel_cns',
       'rel_ant',
-      'rel_spc', 
+      'rel_spc',
       ];
-      params.forEach((param) => { 
+      params.forEach((param) => {
             axios.get(`https://api.datamuse.com/words?${param}=${this.state.query}`, {
             	responseType: 'json'
             }).then(response => {
@@ -121,7 +134,8 @@ handleInputChange = () => {
       axios.get(`https://stark-citadel-44367.herokuapp.com/rhyme/${this.state.query}`, {
         responseType: 'json'
       }).then(response => {
-          let lines = lineShuffle(response.data.lines);
+          let lines = response.data.lines;
+          // let lines = lineShuffle(response.data.lines);
           let words = lines.map(row => `${row[0]} ${row[1]}`);
           this.setState({ ['lines']: words });
       });
@@ -131,6 +145,10 @@ handleInputChange = () => {
         render () {
 
             return (<div>
+          <ol>
+            <li>Type in rhyming word</li>
+            <li>Click lines in first column to add to Saved Lines column</li>
+          </ol>
             <div><input
           placeholder="Search for..."
           ref={input => this.search = input}
@@ -140,8 +158,12 @@ handleInputChange = () => {
          <div className='column lines'>
             <h3>Lines</h3>
             <button onClick={this._handleRandom}>Random</button>
-            {this.state.lines.map((word, i) => <div key={i}>{word}</div>)}
+            {this.state.lines.map((word, i) => <div className='lineRow' onClick={() => this.addLine(word.substring(0, word.lastIndexOf(" ")))} key={i}>{word}</div>)}
          </div>
+        <div className='column lines'>
+          <h3>Saved Lines</h3>
+          {this.state.savedLines.map((line, i) => <div key={i}>{line}</div>)}
+        </div>
         <div className='column'>
             <h3>Meaning</h3>
             {this.state.ml.map((word, i) => <div key={i}>{word}</div>)}
